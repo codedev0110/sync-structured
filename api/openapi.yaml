@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: myproject API
+  description: REST API for user resource. Handler → Service → Repository → DB.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local
+
+paths:
+  /users:
+    get:
+      summary: List all users
+      operationId: listUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation error
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+    put:
+      summary: Update user
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+        '400':
+          description: Validation error
+    delete:
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not found
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        email: { type: string }
+        active: { type: boolean }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    CreateUserInput:
+      type: object
+      required: [name, email]
+      properties:
+        name: { type: string }
+        email: { type: string }
+        active: { type: boolean }
+    UpdateUserInput:
+      type: object
+      properties:
+        name: { type: string }
+        email: { type: string }
+        active: { type: boolean }

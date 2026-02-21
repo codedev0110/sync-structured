@@ -1,0 +1,17 @@
+# Example configuration for myapp.
+# Copy to config.yaml and adjust for your environment.
+
+server:
+  port: 8080
+  read_timeout_sec: 30
+  write_timeout_sec: 30
+
+database:
+  dsn: "postgres://user:password@localhost:5432/myproject?sslmode=disable"
+  max_open_conns: 25
+  max_idle_conns: 5
+  conn_max_lifetime_min: 5
+
+logging:
+  level: "info"   # debug | info | warn | error
+  format: "json"  # json | text
